@@ -1,0 +1,200 @@
+const Product = require('../models/Product');
+
+const sampleProducts = [
+  {
+    name: 'ESP32-WROOM-32E Dual-Core WiFi & BLE Dev Board',
+    description: 'High-performance 32-bit dual-core microcontroller with integrated 2.4 GHz Wi-Fi, Bluetooth 4.2 BR/EDR, and BLE. Features 520 KB SRAM, 4 MB SPI Flash, and rich peripheral pinouts.',
+    price: 650,
+    category: 'Microcontrollers',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAIdGiIB-wJyLRSD44B08eCxDJ9UB-lBP_LMpK3FelFoJqbZoASLYPoVH8mO5eX1QkcEx3B0w7y8V08q1nTvnfDb6xdU4HcDf08gTSambDGpQE6geYjjI88fuE4vbrgG0-W-qY9xqMw96D0uLAkrdO29wUkhuC8voYNTJUNAlYGNVSXCmT2CwNlPHUv9W6MTozo-oGLNgSPB7UVWTNUM1XESyYDqelDal48kKddXhkKtuFguCbOJzYA',
+    availableStock: 25,
+    sku: 'MCU-ESP32-32E',
+    specs: {
+      architecture: 'Xtensa Dual-Core 32-bit LX6',
+      clockSpeed: '240 MHz',
+      operatingVoltage: '3.3V',
+      flashMemory: '4 MB SPI Flash',
+      ram: '520 KB SRAM',
+      interfaces: ['Wi-Fi 802.11 b/g/n', 'Bluetooth 4.2', 'SPI', 'I2C', 'UART', 'PWM'],
+      packageType: '38-pin DIP Breadboard-Friendly',
+    },
+  },
+  {
+    name: 'Raspberry Pi Pico W with Wireless Connectivity',
+    description: 'Silicon designed by Raspberry Pi, featuring the RP2040 dual ARM Cortex-M0+ processor and Infineon CYW43439 wireless chip for 2.4GHz Wi-Fi 4.',
+    price: 720,
+    category: 'Microcontrollers',
+    image: 'https://images.unsplash.com/photo-1553406830-ef2513450d76?auto=format&fit=crop&w=800&q=80',
+    availableStock: 18,
+    sku: 'MCU-RPI-PICOW',
+    specs: {
+      architecture: 'Dual-core ARM Cortex-M0+',
+      clockSpeed: '133 MHz',
+      operatingVoltage: '3.3V',
+      flashMemory: '2 MB QSPI Flash',
+      ram: '264 KB on-chip SRAM',
+      interfaces: ['2.4GHz Wi-Fi', '2x SPI', '2x I2C', '2x UART', '16x PWM', '8x PIO'],
+      packageType: 'Castellated Module',
+    },
+  },
+  {
+    name: 'Arduino Uno R4 WiFi Dev Board',
+    description: 'The standard maker platform revamped with a powerful Renesas RA4M1 32-bit microcontroller and ESP32-S3 module for Wi-Fi and Bluetooth.',
+    price: 2450,
+    category: 'Microcontrollers',
+    image: 'https://images.unsplash.com/photo-1608562095697-a169b18973b0?auto=format&fit=crop&w=800&q=80',
+    availableStock: 12,
+    sku: 'MCU-ARD-UNOR4',
+    specs: {
+      architecture: 'Renesas RA4M1 (ARM Cortex-M4)',
+      clockSpeed: '48 MHz',
+      operatingVoltage: '5V',
+      flashMemory: '256 KB Flash',
+      ram: '32 KB SRAM',
+      interfaces: ['Wi-Fi', 'Bluetooth', '12x8 LED Matrix', 'CAN Bus', 'DAC', 'OPAMP'],
+      packageType: 'Standard Arduino Shield Form-Factor',
+    },
+  },
+  {
+    name: 'STM32 Nucleo-F401RE Prototyping Board',
+    description: 'High-performance ARM Cortex-M4 with DSP and FPU, compatible with Arduino Uno R3 connectivity and ST morpho headers for complete pin access.',
+    price: 1850,
+    category: 'Microcontrollers',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+    availableStock: 8,
+    sku: 'MCU-STM32-F401',
+    specs: {
+      architecture: 'ARM 32-bit Cortex-M4 with FPU',
+      clockSpeed: '84 MHz',
+      operatingVoltage: '3.3V / 5V',
+      flashMemory: '512 KB Flash',
+      ram: '96 KB SRAM',
+      interfaces: ['USB OTG', '3x SPI', '3x I2C', '3x USART', '16-channel ADC'],
+      packageType: 'Nucleo-64 Form Factor',
+    },
+  },
+  {
+    name: 'BME680 4-in-1 Environmental Sensor Module',
+    description: 'Precision integrated environmental sensor measuring gas resistance (VOCs), barometric pressure, relative humidity, and ambient temperature.',
+    price: 1350,
+    category: 'Sensors',
+    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+    availableStock: 30,
+    sku: 'SNS-BME680-MOD',
+    specs: {
+      architecture: 'MEMS Environmental Sensor',
+      clockSpeed: 'Up to 3.4 MHz (I2C High-Speed)',
+      operatingVoltage: '1.8V - 3.6V',
+      flashMemory: 'N/A',
+      ram: 'Internal calibration memory',
+      interfaces: ['I2C', 'SPI (3-wire / 4-wire)'],
+      packageType: 'Breakout PCB with Level Shifter',
+    },
+  },
+  {
+    name: 'MPU-6050 6-Axis Accelerometer and Gyroscope',
+    description: 'Combines a 3-axis gyroscope and a 3-axis accelerometer with an onboard Digital Motion Processor (DMP) capable of complex 9-axis MotionFusion.',
+    price: 320,
+    category: 'Sensors',
+    image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
+    availableStock: 45,
+    sku: 'SNS-MPU6050-6AX',
+    specs: {
+      architecture: 'MEMS MotionTracking',
+      clockSpeed: '400 kHz (Fast Mode I2C)',
+      operatingVoltage: '3.3V - 5V (Onboard LDO)',
+      flashMemory: 'N/A',
+      ram: '1024-byte FIFO buffer',
+      interfaces: ['I2C (Address 0x68 / 0x69)'],
+      packageType: 'Standard 8-pin Header',
+    },
+  },
+  {
+    name: '0.96 inch I2C OLED Display Module (128x64)',
+    description: 'Ultra-bright high-contrast OLED screen with SSD1306 driver chip. Low power consumption, crisp graphics, and 4-pin I2C simplicity.',
+    price: 420,
+    category: 'Displays',
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
+    availableStock: 22,
+    sku: 'DSP-OLED-096I2C',
+    specs: {
+      architecture: 'SSD1306 Monochrome Matrix',
+      clockSpeed: 'Up to 400 kHz',
+      operatingVoltage: '3.3V - 5.0V',
+      flashMemory: 'N/A',
+      ram: '1 KB Display RAM (GDDRAM)',
+      interfaces: ['I2C (VCC, GND, SCL, SDA)'],
+      packageType: 'PCB Module with mounting holes',
+    },
+  },
+  {
+    name: 'PCA9685 16-Channel 12-Bit PWM/Servo Driver',
+    description: 'I2C-controlled PWM driver with built-in clock. Controls up to 16 free-running PWM outputs with 12-bit precision, perfect for robotics and hexapods.',
+    price: 540,
+    category: 'Robotics',
+    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+    availableStock: 15,
+    sku: 'ROB-PCA9685-16CH',
+    specs: {
+      architecture: 'I2C Bus Controller',
+      clockSpeed: '25 MHz internal clock',
+      operatingVoltage: '3V - 5.5V Logic (6V Servo Power)',
+      flashMemory: 'N/A',
+      ram: 'Registers',
+      interfaces: ['I2C (62 address jumpers)'],
+      packageType: '16x 3-pin standard servo header blocks',
+    },
+  },
+  {
+    name: 'VL53L0X Time-of-Flight (ToF) Laser Ranging Sensor',
+    description: 'Sub-millimeter flight time distance measurement sensor capable of accurately measuring absolute distance up to 2m regardless of target reflectance.',
+    price: 890,
+    category: 'Sensors',
+    image: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=800&q=80',
+    availableStock: 14,
+    sku: 'SNS-VL53L0X-TOF',
+    specs: {
+      architecture: 'VCSEL 940nm Infrared Laser',
+      clockSpeed: '400 kHz',
+      operatingVoltage: '2.8V - 5V',
+      flashMemory: 'N/A',
+      ram: 'N/A',
+      interfaces: ['I2C'],
+      packageType: 'Optical Aperture Module',
+    },
+  },
+  {
+    name: 'Limited Edition RISC-V Silicon Prototype Unit (Single Stock)',
+    description: 'Special engineering sample chip board reserved for critical testing and single-stock concurrency stress testing.',
+    price: 4999,
+    category: 'Microcontrollers',
+    image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=800&q=80',
+    availableStock: 1, // Single stock for concurrency stress test!
+    sku: 'MCU-RISCV-PROT-01',
+    specs: {
+      architecture: 'RV64GC 64-bit RISC-V',
+      clockSpeed: '1.0 GHz',
+      operatingVoltage: '3.3V',
+      flashMemory: '32 MB QSPI Flash',
+      ram: '8 MB PSRAM',
+      interfaces: ['PCIe 2.0', 'Gigabit Ethernet', 'Dual USB-C'],
+      packageType: 'Special Prototype Gold-plated Carrier',
+    },
+  },
+];
+
+const seedProducts = async () => {
+  const count = await Product.countDocuments();
+  if (count === 0) {
+    console.log('[Seed] Seeding database with realistic hardware electronics catalog...');
+    await Product.insertMany(sampleProducts);
+    console.log(`[Seed] Successfully seeded ${sampleProducts.length} hardware products.`);
+  } else {
+    console.log(`[Seed] Database already contains ${count} products. Skipping initial seed.`);
+  }
+};
+
+module.exports = {
+  sampleProducts,
+  seedProducts,
+};
